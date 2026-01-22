@@ -1,57 +1,70 @@
 "use client"
 import React from 'react';
+import { motion } from 'framer-motion';
+
+const skills = [
+  { name: 'HTML5', x: -100, y: -60, color: 'text-orange-500' },
+  { name: 'CSS3', x: 100, y: -40, color: 'text-blue-500' },
+  { name: 'JavaScript', x: -80, y: 70, color: 'text-yellow-400' },
+  { name: 'React.js', x: 90, y: 80, color: 'text-cyan-400' },
+  { name: 'Node.js', x: 0, y: -110, color: 'text-green-500' },
+  { name: 'MongoDB', x: -120, y: 0, color: 'text-green-600' },
+  { name: 'Git', x: 120, y: 10, color: 'text-red-500' },
+];
 
 const Skills = () => {
-  const skills = ["React", "Node.js", "MongoDB", "JavaScript", "HTML", "CSS", "Next.js", "Tailwind"];
-
   return (
-    <section id="skills" className="py-20 bg-[#0a0a0a] relative overflow-hidden min-h-[600px]">
+    <section id="skills" className="py-24 bg-[#0a0a0a] relative min-h-[650px] flex flex-col items-center justify-center overflow-hidden">
+      {/* Title - Adding Padding for Mobile Touch Fix */}
+      <h2 className="text-2xl md:text-4xl font-bold text-white mb-20 z-20 uppercase tracking-[0.3em] px-4 text-center">
+        Technical Skills
+      </h2>
       
-      {/* Balloon Floating Background */}
-      <div className="absolute inset-0 pointer-events-none select-none">
+      {/* Background Glow */}
+      <div className="absolute w-72 h-72 bg-cyan-500/10 blur-[120px] rounded-full"></div>
+
+      {/* Skills Container */}
+      <div className="relative w-full max-w-sm md:max-w-5xl h-[400px] flex items-center justify-center">
         {skills.map((skill, index) => (
-          <div
+          <motion.div
             key={index}
-            className="absolute text-white font-black uppercase opacity-[0.03] md:opacity-[0.05] animate-balloon"
-            style={{
-              // Initial positions
-              top: `${Math.random() * 80 + 10}%`,
-              left: `${Math.random() * 70 + 10}%`,
-              fontSize: 'clamp(2rem, 10vw, 8rem)',
-              animationDelay: `${index * 2}s`,
-              animationDuration: `${15 + index * 2}s`
+            animate={{ 
+              y: [0, -15, 0], 
+              x: [0, 8, 0] 
+            }}
+            transition={{ 
+              duration: 4 + index % 2, 
+              repeat: Infinity, 
+              ease: "easeInOut", 
+              delay: index * 0.1 
+            }}
+            className="absolute px-4 py-2 md:px-6 md:py-3 bg-[#111] border border-gray-800 rounded-full shadow-2xl z-10 whitespace-nowrap"
+            style={{ 
+              // Mobile fix: Humne responsive multiplier lagaya hai
+              left: `calc(50% + (var(--x-pos) * ${skill.x}px))`, 
+              top: `calc(50% + (var(--y-pos) * ${skill.y}px))`, 
+              transform: 'translate(-50%, -50%)' 
             }}
           >
-            {skill}
-          </div>
+            <span className={`text-[10px] md:text-sm font-bold tracking-widest ${skill.color}`}>
+              {skill.name}
+            </span>
+          </motion.div>
         ))}
       </div>
 
       <style jsx>{`
-        @keyframes balloon {
-          0% { transform: translate(0, 0) rotate(0deg); }
-          33% { transform: translate(30px, -50px) rotate(5deg); }
-          66% { transform: translate(-20px, -80px) rotate(-5deg); }
-          100% { transform: translate(0, 0) rotate(0deg); }
+        div {
+          --x-pos: 0.6; /* Mobile par skills thodi paas rahengi */
+          --y-pos: 0.6;
         }
-        .animate-balloon {
-          animation: balloon infinite ease-in-out;
+        @media (min-width: 768px) {
+          div {
+            --x-pos: 1; /* Laptop par poori jagah lengi */
+            --y-pos: 1;
+          }
         }
       `}</style>
-
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
-        <h2 className="text-3xl md:text-5xl font-bold text-white mb-16 text-center uppercase tracking-[0.2em]">
-          Technical Skills
-        </h2>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-          {skills.map((skill) => (
-            <div key={skill} className="bg-[#111] p-6 rounded-2xl border border-gray-800 text-center hover:border-cyan-500/50 transition-all">
-              <p className="text-gray-400 font-medium">{skill}</p>
-            </div>
-          ))}
-        </div>
-      </div>
     </section>
   );
 };
