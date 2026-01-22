@@ -7,7 +7,7 @@ import Contact from '@/components/Contact';
 
 export default function Home() {
   return (
-    <main className="bg-[#0a0a0a] min-h-screen">
+    <main className="bg-[#0a0a0a] min-h-screen overflow-y-auto"> 
       <Navbar />
      
       <section id="home"><Hero /></section>
