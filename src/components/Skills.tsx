@@ -1,67 +1,58 @@
 "use client"
-import React from 'react';
+import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 
 const skills = [
-  { name: 'HTML5', x: -70, y: -100, color: 'text-orange-500' },
-  { name: 'CSS3', x: 70, y: -80, color: 'text-blue-500' },
-  { name: 'JavaScript', x: -80, y: 120, color: 'text-yellow-400' },
-  { name: 'React.js', x: 80, y: 150, color: 'text-cyan-400' },
-  { name: 'Node.js', x: 0, y: 20, color: 'text-green-500' },
-  { name: 'MongoDB', x: -100, y: 50, color: 'text-green-600' },
-  { name: 'Git', x: 100, y: 70, color: 'text-red-500' },
+  { name: 'HTML5', color: 'text-orange-500', size: 'w-24 h-24 md:w-32 md:h-32' },
+  { name: 'CSS3', color: 'text-blue-500', size: 'w-24 h-24 md:w-32 md:h-32' },
+  { name: 'JavaScript', color: 'text-yellow-400', size: 'w-28 h-28 md:w-36 md:h-36' },
+  { name: 'React.js', color: 'text-cyan-400', size: 'w-32 h-32 md:w-40 md:h-40' },
+  { name: 'Node.js', color: 'text-green-500', size: 'w-28 h-28 md:w-36 md:h-36' },
+  { name: 'MongoDB', color: 'text-green-600', size: 'w-28 h-28 md:w-36 md:h-36' },
+  { name: 'Git', color: 'text-red-500', size: 'w-20 h-20 md:w-28 md:h-28' },
 ];
 
 const Skills = () => {
+  const constraintsRef = useRef(null);
+
   return (
-    <section id="skills" className="py-24 bg-[#0a0a0a] relative min-h-[750px] flex flex-col items-center justify-start overflow-hidden max-w-full">
+    <section id="skills" className="py-24 bg-[#0a0a0a] relative min-h-[800px] flex flex-col items-center overflow-hidden">
       
-      {/* Heading - Increased Margin Bottom to avoid overlap */}
-      <h2 className="text-3xl md:text-5xl font-bold text-white mb-32 z-20 uppercase tracking-[0.3em] text-center px-4">
+      <h2 className="text-3xl md:text-5xl font-bold text-white mb-10 z-20 uppercase tracking-[0.3em] text-center px-4">
         Technical Skills
       </h2>
       
-      {/* Skills Container */}
-      <div className="relative w-full h-[400px] flex items-center justify-center">
+      {/* Constraints Area: Iske bahar bubbles nahi jayenge */}
+      <motion.div 
+        ref={constraintsRef}
+        className="relative w-full max-w-5xl h-[500px] md:h-[600px] flex flex-wrap justify-center items-center gap-4 md:gap-10 p-4"
+      >
         {skills.map((skill, index) => (
           <motion.div
             key={index}
+            drag
+            dragConstraints={constraintsRef} // Screen se bahar nahi jayega
+            whileDrag={{ scale: 1.2, zIndex: 50 }}
             animate={{ 
-              y: [0, -25, 0], 
-              x: [0, 10, 0] 
+              y: [0, -20, 0],
+              x: [0, 10, 0]
             }}
             transition={{ 
-              duration: 4 + (index % 3), 
+              duration: 3 + (index % 2), 
               repeat: Infinity, 
-              ease: "easeInOut", 
-              delay: index * 0.2 
+              ease: "easeInOut" 
             }}
-            className="absolute px-5 py-3 md:px-10 md:py-6 bg-[#111]/90 backdrop-blur-md border border-gray-800 rounded-2xl shadow-2xl z-10 flex items-center justify-center"
-            style={{ 
-              left: `calc(50% + (var(--spread-x) * ${skill.x}px))`, 
-              top: `calc(50% + (var(--spread-y) * ${skill.y}px))`, 
-              transform: 'translate(-50%, -50%)' 
-            }}
+            className={`${skill.size} bg-[#111] border border-gray-800 rounded-full shadow-2xl flex items-center justify-center cursor-grab active:cursor-grabbing backdrop-blur-md hover:border-cyan-500/50 transition-colors z-10`}
           >
-            <span className={`text-xs md:text-xl font-black tracking-widest ${skill.color} whitespace-nowrap`}>
+            <span className={`text-[10px] md:text-sm font-black text-center px-2 uppercase tracking-tighter ${skill.color}`}>
               {skill.name}
             </span>
           </motion.div>
         ))}
-      </div>
 
-      <style jsx>{`
-        div {
-          --spread-x: 0.8; /* Mobile par width control */
-          --spread-y: 0.8; /* Mobile par height control */
-        }
-        @media (min-width: 768px) {
-          div {
-            --spread-x: 2.5; /* Laptop par wide spread */
-            --spread-y: 1.8; /* Laptop par height control taaki heading se na takraye */
-          }
-        }
-      `}</style>
+        {/* Central Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-cyan-500/10 blur-[100px] rounded-full -z-10"></div>
+      </motion.div>
     </section>
   );
 };
