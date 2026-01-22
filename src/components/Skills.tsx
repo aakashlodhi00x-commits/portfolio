@@ -1,40 +1,61 @@
 "use client"
 import React from 'react';
+import { motion } from 'framer-motion';
 
 const Skills = () => {
   const skills = ["React", "Node.js", "MongoDB", "JavaScript", "HTML", "CSS", "Next.js", "Tailwind"];
 
   return (
-    // 'overflow-hidden' lagana sabse zaroori hai horizontal scroll rokne ke liye
     <section id="skills" className="py-20 bg-[#0a0a0a] relative overflow-hidden">
       
-      {/* Background Floating Text - Optimized for Mobile */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03] md:opacity-[0.05] select-none">
+      {/* Background Floating Text with Animation */}
+      <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
         {skills.map((skill, index) => (
-          <span
+          <motion.span
             key={index}
-            className="absolute text-white font-black uppercase tracking-tighter"
+            // Floating Animation Logic
+            animate={{
+              y: [0, -20, 0], // Upar niche move karega
+            }}
+            transition={{
+              duration: 5 + index, // Har word ki speed alag hogi
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            className="absolute text-white font-black uppercase tracking-tighter 
+                       opacity-[0.02] md:opacity-[0.04]"
             style={{
-              // Mobile par text thoda andar rakha hai (10% and 70%)
               top: `${(index * 12) + 5}%`,
-              left: index % 2 === 0 ? '10%' : 'auto',
-              right: index % 2 !== 0 ? '10%' : 'auto',
-              // Clamp use kiya hai taaki mobile par font chota ho jaye
-              fontSize: 'clamp(3rem, 15vw, 10rem)', 
+              left: index % 2 === 0 ? 'var(--floating-left)' : 'auto',
+              right: index % 2 !== 0 ? 'var(--floating-right)' : 'auto',
+              fontSize: 'var(--floating-size)',
             }}
           >
             {skill}
-          </span>
+          </motion.span>
         ))}
       </div>
 
+      <style jsx>{`
+        span {
+          --floating-left: 10%;
+          --floating-right: 10%;
+          --floating-size: 3rem; /* Mobile par chota size */
+        }
+        @media (min-width: 768px) {
+          span {
+            --floating-left: 5%;
+            --floating-right: 5%;
+            --floating-size: 7rem; /* Laptop par professional bada size */
+          }
+        }
+      `}</style>
+
       <div className="max-w-6xl mx-auto px-6 relative z-10">
-        {/* Main Heading with Padding to avoid screen touch */}
         <h2 className="text-3xl md:text-5xl font-bold text-white mb-16 text-center uppercase tracking-[0.2em] px-4">
           Technical Skills
         </h2>
 
-        {/* Visible Skills Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
           {skills.map((skill) => (
             <div key={skill} className="group bg-[#111] p-6 rounded-2xl border border-gray-800 text-center hover:border-cyan-500/50 transition-all duration-300">
