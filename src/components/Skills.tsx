@@ -1,39 +1,50 @@
 "use client"
 import React from 'react';
-import { motion } from 'framer-motion';
-
-const skills = [
-  { name: 'HTML5', x: -120, y: -80, color: 'text-orange-500' },
-  { name: 'CSS3', x: 120, y: -60, color: 'text-blue-500' },
-  { name: 'JavaScript', x: -100, y: 90, color: 'text-yellow-400' },
-  { name: 'React.js', x: 110, y: 100, color: 'text-cyan-400' },
-  { name: 'Node.js', x: 0, y: -130, color: 'text-green-500' },
-  { name: 'MongoDB', x: -140, y: 10, color: 'text-green-600' },
-  { name: 'Git', x: 140, y: 20, color: 'text-red-500' },
-];
 
 const Skills = () => {
-  return (
-    <section id="skills" className="py-24 bg-[#0a0a0a] relative min-h-[600px] flex flex-col items-center justify-center overflow-hidden">
-      <h2 className="text-3xl md:text-4xl font-bold text-white mb-20 z-20 uppercase tracking-[0.3em]">Technical Skills</h2>
-      <div className="absolute w-72 h-72 bg-cyan-500/10 blur-[120px] rounded-full"></div>
+  const skills = ["React", "Node.js", "MongoDB", "JavaScript", "HTML", "CSS", "Next.js", "Tailwind"];
 
-      <div className="relative w-full max-w-5xl h-[450px] flex items-center justify-center">
+  return (
+    // 'overflow-hidden' lagana sabse zaroori hai horizontal scroll rokne ke liye
+    <section id="skills" className="py-20 bg-[#0a0a0a] relative overflow-hidden">
+      
+      {/* Background Floating Text - Optimized for Mobile */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.03] md:opacity-[0.05] select-none">
         {skills.map((skill, index) => (
-          <motion.div
+          <span
             key={index}
-            animate={{ y: [0, -20, 0], x: [0, 10, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: index * 0.2 }}
-            className="absolute px-6 py-3 bg-[#111] border border-gray-800 rounded-full shadow-2xl z-10"
-            style={{ left: `calc(50% + ${skill.x}px)`, top: `calc(50% + ${skill.y}px)`, transform: 'translate(-50%, -50%)' }}
+            className="absolute text-white font-black uppercase tracking-tighter"
+            style={{
+              // Mobile par text thoda andar rakha hai (10% and 70%)
+              top: `${(index * 12) + 5}%`,
+              left: index % 2 === 0 ? '10%' : 'auto',
+              right: index % 2 !== 0 ? '10%' : 'auto',
+              // Clamp use kiya hai taaki mobile par font chota ho jaye
+              fontSize: 'clamp(3rem, 15vw, 10rem)', 
+            }}
           >
-            <span className={`text-xs md:text-sm font-bold tracking-widest ${skill.color}`}>{skill.name}</span>
-          </motion.div>
+            {skill}
+          </span>
         ))}
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
+        {/* Main Heading with Padding to avoid screen touch */}
+        <h2 className="text-3xl md:text-5xl font-bold text-white mb-16 text-center uppercase tracking-[0.2em] px-4">
+          Technical Skills
+        </h2>
+
+        {/* Visible Skills Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+          {skills.map((skill) => (
+            <div key={skill} className="group bg-[#111] p-6 rounded-2xl border border-gray-800 text-center hover:border-cyan-500/50 transition-all duration-300">
+              <p className="text-gray-400 group-hover:text-cyan-400 font-medium transition-colors">{skill}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
 };
 
- 
 export default Skills;
